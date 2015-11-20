@@ -3,6 +3,7 @@ A quick launch bar with auto-hide capabilities. A better README.md is
 forthcoming.
 
 
+##Installation
   * First load in the library  
 
          -- Load Auto-Hiding side-panel
@@ -37,3 +38,5 @@ according to the WM's instructions.
              myshortcutbox[s].height=goblin.button_list_count_members()*myshortcutbox[s].width
              myshortcutbox[s]:set_widget(goblin.button_layout_menu())
          
+##screenshot
+![A menu with a terminal and gedit.](https://raw.githubusercontent.com/cmotc/svirfneblin-goblin/master/gb1.png)
