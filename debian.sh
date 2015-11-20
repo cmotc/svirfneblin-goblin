@@ -18,13 +18,17 @@ mkdir $DEBFOLDERNAME
 cp -R $SOURCEBINPATH/ $DEBFOLDERNAME/
 cd $DEBFOLDERNAME
 
-cp README.md usr/share/doc/svirfneblin-goblin-menu/README.md
+mkdir -p usr/share/doc/svirfneblin-goblin
+cp README.md usr/share/doc/svirfneblin-goblin/README.md
 
 pwd
 # Create the packaging skeleton (debian/*)
 dh_make -s --indep --createorig 
+
 mkdir -p debian/tmp/usr
+
 cp -R usr debian/tmp/usr
+cp -R etc debian/tmp/etc
 # Remove make calls
 grep -v makefile debian/rules > debian/rules.new 
 mv debian/rules.new debian/rules 
