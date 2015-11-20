@@ -7,15 +7,13 @@ require("awful.autofocus")
 local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("beautiful")
--- Overview Library
-local calladuran = require("calladuran")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
-
 -- Load Debian menu entries
 require("debian.menu")
-require("conky.hud")
+-- Load Auto-Hiding side-panel
+require("goblin.side")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -44,14 +42,11 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init("/usr/share/awesome/themes/default/theme.lua")
-
--- Initialize Overview plugin
--- calladuran.init("","")
+beautiful.init("@AWESOME_THEMES_PATH@/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "x-terminal-emulator"
-editor = os.getenv("EDITOR") or "editor"
+terminal = "xterm"
+editor = os.getenv("EDITOR") or "nano"
 editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
@@ -106,7 +101,6 @@ myawesomemenu = {
 }
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "Debian", debian.menu.Debian_menu.Debian },
                                     { "open terminal", terminal }
                                   }
                         })
@@ -124,6 +118,20 @@ mytextclock = awful.widget.textclock()
 
 -- Create a wibox for each screen and add it
 mywibox = {}
+myshortcutbox = {}
+function hideshortcutbox()
+    myshortcutbox[mouse.screen].visible = not myshortcutbox[mouse.screen].visible
+end
+myquicklaunchtoggle = awful.widget.button({ image=beautiful.awesome_icon })
+myquicklaunchtoggle:buttons(awful.button({}, 1, function () hideshortcutbox() end)
+)
+sbtimer = timer({timeout = 6})
+sbtimer:connect_signal("timeout", function()
+        if myshortcutbox[mouse.screen].visible then
+            hideshortcutbox()
+        end
+    end)
+sbtimer:start()
 mypromptbox = {}
 mylayoutbox = {}
 mytaglist = {}
@@ -211,6 +219,12 @@ for s = 1, screen.count() do
     layout:set_right(right_layout)
 
     mywibox[s]:set_widget(layout)
+    -- create the sidebar shortcut launcher wibox
+    myshortcutbox[s] = awful.wibox({ position = "left", screen = s    })
+    myshortcutbox[s].width=32
+    myshortcutbox[s].height=goblin.button_list_count_members()*myshortcutbox[s].width
+    myshortcutbox[s]:set_widget(goblin.button_layout_menu())
+
 end
 -- }}}
 
@@ -224,7 +238,6 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-    awful.key({}, "F10", function() raise_conky() end, function() lower_conky_delayed() end),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
@@ -363,12 +376,6 @@ root.keys(globalkeys)
 -- Rules to apply to new clients (through the "manage" signal).
 awful.rules.rules = {
     -- All clients will match this rule.
-    { rule = { class = "Conky" },
-      properties = {
-        floating = true,
-        sticky = true,
-        ontop = false,
-        focusable = false } },
     { rule = { },
       properties = { border_width = beautiful.border_width,
                      border_color = beautiful.border_normal,
@@ -409,9 +416,6 @@ client.connect_signal("manage", function (c, startup)
             awful.placement.no_overlap(c)
             awful.placement.no_offscreen(c)
         end
-    elseif not c.size_hints.user_position and not c.size_hints.program_position then
-        -- Prevent clients from being unreachable after screen count change
-        awful.placement.no_offscreen(c)
     end
 
     local titlebars_enabled = false
@@ -462,6 +466,4 @@ end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
-
-awful.util.spawn_with_shell("run_once awmconky")
 -- }}}
