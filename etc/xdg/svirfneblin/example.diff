@@ -1,0 +1,27 @@
+12a13,16
+> -- Load Debian menu entries
+> require("debian.menu")
+> -- Load Auto-Hiding side-panel
+> require("goblin.side")
+116a121,134
+> myshortcutbox = {}
+> function hideshortcutbox()
+>     myshortcutbox[mouse.screen].visible = not myshortcutbox[mouse.screen].visible
+> end
+> myquicklaunchtoggle = awful.widget.button({ image=beautiful.awesome_icon })
+> myquicklaunchtoggle:buttons(awful.button({}, 1, function () hideshortcutbox() end)
+> )
+> sbtimer = timer({timeout = 6})
+> sbtimer:connect_signal("timeout", function()
+>         if myshortcutbox[mouse.screen].visible then
+>             hideshortcutbox()
+>         end
+>     end)
+> sbtimer:start()
+203a222,227
+>     -- create the sidebar shortcut launcher wibox
+>     myshortcutbox[s] = awful.wibox({ position = "left", screen = s    })
+>     myshortcutbox[s].width=32
+>     myshortcutbox[s].height=goblin.button_list_count_members()*myshortcutbox[s].width
+>     myshortcutbox[s]:set_widget(goblin.button_layout_menu())
+> 
