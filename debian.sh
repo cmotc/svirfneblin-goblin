@@ -5,7 +5,7 @@ SOURCEDIR=goblin
 SOURCEBIN=side.lua
 SOURCELOC=goblin/side.lua
 SOURCEDOC=README.md
-DEBFOLDER=svirfneblin-goblin-menu
+DEBFOLDER=svirfneblin-goblin
 DEBVERSION=20151120
 cd $DEBFOLDER
 git pull origin master
@@ -48,8 +48,7 @@ Homepage: https://www.github.com/cmotc/$DEBFOLDER
 Package: $DEBFOLDER
 Architecture: all
 Depends: lightdm, lightdm-gtk-greeter, awesome (>= 3.4), ${misc:Depends}
-Description: A modified version of the debian rc.lua which starts conky, and
- a script which makes sure awesomewm only starts it once.
+Description: An awesomewm hideable quick-lauch widget.
 " > debian/control
 
 #echo "gsettings set org.gnome.desktop.session session-name awesome-gnome
