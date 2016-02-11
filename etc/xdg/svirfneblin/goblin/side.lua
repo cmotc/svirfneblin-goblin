@@ -62,8 +62,8 @@ end
 button_list_populate()
 
 function button_layout_menu()
-    local layout = wibox.layout.align.vertical()
-    local center = wibox.layout.fixed.vertical()
+    local layout = wibox.layout.align.horizontal()
+    local center = wibox.layout.fixed.horizontal()
     for key, button in pairs(mybuttonlist) do
         center:add(button)
     end
