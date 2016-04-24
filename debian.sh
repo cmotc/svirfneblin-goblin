@@ -7,7 +7,8 @@ SOURCELOC=goblin/side.lua
 SOURCEDOC=README.md
 DEBFOLDER=svirfneblin-goblin
 DEBVERSION=20151120
-cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+TOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd $TOME
 git pull origin master
 DEBFOLDERNAME="../$DEBFOLDER-$DEBVERSION"
 DEBPACKAGENAME=$DEBFOLDER\_$DEBVERSION
@@ -15,7 +16,7 @@ rm -rf $DEBFOLDERNAME
 # Create your scripts source dir
 mkdir $DEBFOLDERNAME
 # Copy your script to the source dir
-cp -R $SOURCEBINPATH/ $DEBFOLDERNAME/
+cp -R $TOME $DEBFOLDERNAME/
 cd $DEBFOLDERNAME
 
 mkdir -p usr/share/doc/svirfneblin-goblin
