@@ -7,7 +7,7 @@ SOURCELOC=goblin/side.lua
 SOURCEDOC=README.md
 DEBFOLDER=svirfneblin-goblin
 DEBVERSION=20151120
-cd $DEBFOLDER
+cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 git pull origin master
 DEBFOLDERNAME="../$DEBFOLDER-$DEBVERSION"
 DEBPACKAGENAME=$DEBFOLDER\_$DEBVERSION
