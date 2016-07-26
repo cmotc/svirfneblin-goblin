@@ -26,7 +26,7 @@ cp README.md usr/share/doc/svirfneblin-goblin/README.md
 
 pwd
 # Create the packaging skeleton (debian/*)
-dh_make -s --indep --createorig 
+dh_make --indep --createorig 
 
 mkdir -p debian/tmp/usr
 
